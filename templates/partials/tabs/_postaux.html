@@ -1,0 +1,103 @@
+        <!-- POST / AUXILIARY CONSOLE -->
+        <div id="postaux" class="tab-content hidden flex-col h-full overflow-hidden gap-5">
+
+            <!-- Top: module search + type toggle -->
+            <div class="flex gap-5 flex-shrink-0" style="height:320px;">
+
+                <!-- Left: Search + quick picks -->
+                <div class="card-panel w-80 flex-shrink-0 flex flex-col">
+                    <div class="card-header justify-between flex-shrink-0">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            <span class="card-title text-green-300">Module Search</span>
+                        </div>
+                        <!-- type toggle -->
+                        <div class="flex gap-1">
+                            <button onclick="paSetType('post')" id="pa-type-post"
+                                class="text-[9px] font-bold uppercase px-2 py-1 rounded border transition-all bg-green-500/10 border-green-500/25 text-green-300">post</button>
+                            <button onclick="paSetType('auxiliary')" id="pa-type-auxiliary"
+                                class="text-[9px] font-bold uppercase px-2 py-1 rounded border transition-all bg-[#050608] border-[#1f222a] text-gray-600 hover:text-gray-300">aux</button>
+                        </div>
+                    </div>
+                    <div class="p-3 flex flex-col gap-2 flex-1 min-h-0">
+                        <!-- Search bar -->
+                        <div class="flex gap-2 flex-shrink-0">
+                            <input type="text" id="pa-search-input" placeholder="hashdump, portscan, smb..."
+                                class="form-input-box flex-1 text-xs font-mono"
+                                oninput="paSearch(this.value)"
+                                onkeydown="if(event.key==='Enter') paSearch(document.getElementById('pa-search-input').value, true)">
+                            <button onclick="paSearch(document.getElementById('pa-search-input').value, true)"
+                                class="bg-green-600/20 hover:bg-green-500/30 border border-green-500/25 text-green-300 px-3 py-2 rounded-lg text-xs transition-all flex-shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            </button>
+                        </div>
+                        <!-- Quick picks -->
+                        <div class="flex flex-wrap gap-1 flex-shrink-0">
+                            <button onclick="paQuickPick('post/multi/gather/hashdump')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">hashdump</button>
+                            <button onclick="paQuickPick('post/linux/gather/enum_system')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">enum_system</button>
+                            <button onclick="paQuickPick('post/linux/gather/enum_users_history')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">users+history</button>
+                            <button onclick="paQuickPick('post/multi/manage/shell_to_meterpreter')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">to meterpreter</button>
+                            <button onclick="paQuickPick('post/linux/gather/checkvm')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">checkvm</button>
+                            <button onclick="paQuickPick('post/multi/recon/local_exploit_suggester')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">privesc suggest</button>
+                            <button onclick="paQuickPick('post/windows/gather/enum_system')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">win enum_system</button>
+                            <button onclick="paQuickPick('post/windows/gather/credentials/credential_collector')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">win creds</button>
+                            <button onclick="paQuickPick('auxiliary/scanner/portscan/tcp')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">tcp portscan</button>
+                            <button onclick="paQuickPick('auxiliary/scanner/smb/smb_ms17_010')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">ms17-010 check</button>
+                            <button onclick="paQuickPick('auxiliary/scanner/http/http_version')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">http version</button>
+                            <button onclick="paQuickPick('auxiliary/scanner/ssh/ssh_version')" class="pa-qpick text-[9px] font-mono border border-[#1f222a] bg-[#050608] hover:border-green-500/30 hover:text-green-300 text-gray-500 rounded px-1.5 py-0.5 transition-all">ssh version</button>
+                        </div>
+                        <!-- Search results -->
+                        <div id="pa-search-results" class="hidden flex-1 overflow-y-auto custom-scrollbar space-y-1 border border-[#1f222a] rounded-lg bg-[#050608] p-1.5 min-h-0"></div>
+                    </div>
+                </div>
+
+                <!-- Right: Module config -->
+                <div class="card-panel flex-1 flex flex-col">
+                    <div class="card-header flex-shrink-0 justify-between">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                            <span class="card-title text-green-300 flex-shrink-0">Configuration</span>
+                            <span id="pa-module-name" class="text-[10px] text-gray-500 font-mono truncate">select a module</span>
+                        </div>
+                        <button onclick="paLoadModuleInfo()" id="pa-reload-btn" title="Reload options from MSF"
+                            class="hidden text-[10px] text-gray-600 hover:text-gray-300 border border-[#1f222a] rounded px-2 py-1 transition-all font-mono">↺ Reload</button>
+                    </div>
+
+                    <!-- Session selector -->
+                    <div class="px-4 pt-3 pb-1 flex-shrink-0">
+                        <label class="form-label">Session <span class="text-gray-600 font-normal normal-case tracking-normal">(required for post modules)</span></label>
+                        <div class="select-wrapper">
+                            <select id="pa-session-select" class="form-select-box text-xs" onchange="paSessionChanged()">
+                                <option value="">choose active session</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic options -->
+                    <div id="pa-module-options" class="flex-1 overflow-y-auto p-4 pt-2 space-y-2.5 custom-scrollbar text-xs min-h-0">
+                        <div class="text-xs text-gray-600 italic">Select a module to configure it.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom: output log + run button -->
+            <div class="card-panel flex-1 min-h-0 flex flex-col">
+                <div class="card-header flex-shrink-0 justify-between">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        <span class="card-title text-green-400">Output</span>
+                        <span id="pa-status-badge" class="hidden text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded border"></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="paClearOutput()" class="text-[10px] text-gray-600 hover:text-gray-400 border border-[#1f222a] hover:border-[#2a2f3a] rounded px-2 py-1 font-mono transition-all">clear</button>
+                        <button onclick="paRunModule()" id="pa-run-btn"
+                            class="bg-green-700 hover:bg-green-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg transition-all flex items-center gap-2">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Run Module
+                        </button>
+                    </div>
+                </div>
+                <pre id="pa-output-log" class="flex-1 overflow-y-auto p-4 text-[11px] font-mono text-green-300 whitespace-pre-wrap break-words leading-relaxed custom-scrollbar min-h-0 bg-[#050608]"><span class="text-gray-700 italic">No output yet. Select a module and click Run Module.</span></pre>
+            </div>
+
+        </div>

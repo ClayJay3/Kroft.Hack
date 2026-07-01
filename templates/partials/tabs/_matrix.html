@@ -1,0 +1,40 @@
+        <!-- ASSET MATRIX -->
+        <div id="matrix" class="tab-content hidden flex-col h-full overflow-hidden">
+            <div class="card-panel flex-1 flex flex-col min-h-0">
+                <div class="card-header flex-shrink-0 justify-between">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        <span class="card-title text-blue-400">Discovered Telemetry</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <a href="/api/hosts/export?format=csv" class="text-xs text-gray-500 hover:text-gray-300 transition-colors flex items-center gap-1.5" title="Export matrix as CSV">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            CSV
+                        </a>
+                        <a href="/api/hosts/export?format=json" class="text-xs text-gray-500 hover:text-gray-300 transition-colors" title="Export matrix as JSON">JSON</a>
+                        <button onclick="fetchHosts()" class="text-xs text-gray-500 hover:text-gray-300 transition-colors flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-1 overflow-y-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-[#0f1116] border-b border-subtle text-xs text-gray-500 uppercase tracking-widest font-semibold sticky top-0 z-10">
+                            <tr>
+                                <th class="px-5 py-3.5">IP Address</th>
+                                <th class="px-5 py-3.5">Hostname / MAC</th>
+                                <th class="px-5 py-3.5">OS</th>
+                                <th class="px-5 py-3.5">Open Ports</th>
+                                <th class="px-5 py-3.5">Tags</th>
+                                <th class="px-5 py-3.5">Last Seen</th>
+                                <th class="px-5 py-3.5"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="host-table" class="divide-y divide-[#1f222a] bg-[#050608]">
+                            <tr><td colspan="7" class="text-center py-20 text-gray-600">Loading matrix telemetry...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>

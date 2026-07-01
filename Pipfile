@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "==3.0.0"
+python-nmap = "==0.7.1"
+sqlalchemy = "==2.0.23"
+pymetasploit3 = "==1.0.6"
+requests = "==2.34.2"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"

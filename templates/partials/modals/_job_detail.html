@@ -1,0 +1,31 @@
+<!-- JOB DETAIL MODAL -->
+<div id="job-detail-modal" class="hidden fixed inset-0 z-50 items-center justify-center p-6 bg-black/70 backdrop-blur-sm" onclick="if(event.target===this)closeJobDetail()">
+    <div class="bg-[#0a0c10] border border-[#1f222a] rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col">
+        <div class="flex items-start justify-between gap-3 px-5 py-4 border-b border-[#1f222a]">
+            <div class="min-w-0">
+                <div id="job-detail-title" class="font-mono text-sm text-orange-300 truncate">-</div>
+                <div id="job-detail-sub" class="text-[11px] text-gray-500 mt-0.5 font-mono"></div>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <span id="job-detail-status" class="text-[10px] font-bold uppercase px-2 py-1 rounded border"></span>
+                <button onclick="closeJobDetail()" class="text-gray-600 hover:text-gray-300 transition-colors" title="Close">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+        </div>
+        <div class="overflow-y-auto custom-scrollbar p-5 space-y-4">
+            <div>
+                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Configuration</div>
+                <div id="job-detail-config" class="text-xs font-mono"></div>
+            </div>
+            <div>
+                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Output</div>
+                <pre id="job-detail-output" class="text-[11px] font-mono text-gray-300 bg-[#050608] border border-[#1f222a] rounded-lg p-3 whitespace-pre-wrap break-words max-h-[40vh] overflow-y-auto custom-scrollbar">-</pre>
+            </div>
+        </div>
+        <div class="px-5 py-3 border-t border-[#1f222a] flex justify-end gap-2">
+            <button id="job-detail-feed" onclick="jobDetailFeed()" class="hidden text-[11px] text-violet-400 hover:text-violet-300 border border-violet-500/30 hover:border-violet-400/50 rounded px-3 py-1.5 font-mono transition-all">Feed output to Kroft.AI ↑</button>
+            <button onclick="closeJobDetail()" class="text-[11px] text-gray-400 hover:text-gray-200 border border-[#1f222a] hover:border-[#2a2f3a] rounded px-3 py-1.5 transition-all">Close</button>
+        </div>
+    </div>
+</div>

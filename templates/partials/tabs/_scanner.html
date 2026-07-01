@@ -1,0 +1,163 @@
+        <!-- ADVANCED SCANNER -->
+        <div id="scanner" class="tab-content hidden flex-col h-full overflow-hidden relative">
+            <!-- Command preview bar -->
+            <div class="bg-[#0a0c10] border border-blue-500/30 p-3.5 rounded-xl mb-4 flex-shrink-0 flex items-center justify-between z-20 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/60 to-transparent"></div>
+                <div class="font-mono text-sm flex-1 overflow-x-auto whitespace-nowrap mr-5 flex items-center bg-[#050608] py-2 px-4 rounded-lg border border-[#1f222a] shadow-inner">
+                    <span class="text-green-500 mr-2.5 font-semibold">root@kroft:~#</span>
+                    <span id="cmd-preview" class="text-cyan-300 tracking-wide">nmap</span>
+                    <span class="w-2 h-4 bg-gray-400 ml-1.5 inline-block animate-pulse align-middle"></span>
+                </div>
+                <button onclick="triggerScan()" id="scan-btn" class="bg-blue-600 hover:bg-blue-500 text-white px-7 py-2.5 rounded-lg text-sm font-bold uppercase tracking-widest transition-all shadow-[0_0_12px_rgba(59,130,246,0.4)] whitespace-nowrap flex items-center gap-2 active:scale-95">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Execute Scan
+                </button>
+            </div>
+            <p id="scan-status" class="text-xs text-green-400 mb-3 hidden font-mono bg-green-500/10 border border-green-500/20 p-2 rounded self-start">[+] Scan payload dispatched to background worker.</p>
+
+            <div class="flex-1 overflow-y-auto pb-10 pr-1">
+                <div id="nmap-config" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                    <!-- Target -->
+                    <div class="card-panel md:col-span-2 xl:col-span-3 border-blue-900/30">
+                        <div class="card-header border-b border-blue-900/20">
+                            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+                            <span class="card-title text-blue-300">Target Specification</span>
+                        </div>
+                        <div class="p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div><label class="form-label">Target (IP, Subnet, Host)</label><input type="text" id="target-ip" class="form-input-box border-blue-500/40 focus:border-blue-400 bg-[#0a0c10]" placeholder="e.g. 192.168.1.0/24"></div>
+                            <div><label class="form-label">Exclude (--exclude)</label><input type="text" data-arg="--exclude" class="form-input-box nmap-txt" placeholder="192.168.1.1"></div>
+                            <div><label class="form-label">Random Targets (-iR)</label><input type="number" data-arg="-iR" class="form-input-box nmap-txt" placeholder="0 for infinite"></div>
+                        </div>
+                    </div>
+
+                    <!-- Techniques -->
+                    <div class="card-panel">
+                        <div class="card-header"><svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><span class="card-title">Techniques</span></div>
+                        <div class="p-5 flex flex-col gap-4">
+                            <div><label class="form-label">TCP Scan Type</label>
+                                <div class="select-wrapper"><select class="form-select-box nmap-sel">
+                                    <option value="-sS" selected>SYN Scan (-sS)</option><option value="-sT">Connect (-sT)</option>
+                                    <option value="-sA">ACK (-sA)</option><option value="-sW">Window (-sW)</option>
+                                    <option value="-sM">Maimon (-sM)</option><option value="-sN">NULL (-sN)</option>
+                                    <option value="-sF">FIN (-sF)</option><option value="-sX">Xmas (-sX)</option>
+                                </select></div>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="toggle-row group"><span class="toggle-label">UDP Scan (-sU)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-sU" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                                <label class="toggle-row group"><span class="toggle-label">SCTP INIT (-sY)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-sY" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                                <label class="toggle-row group"><span class="toggle-label">IP Protocol (-sO)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-sO" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Host Discovery -->
+                    <div class="card-panel">
+                        <div class="card-header"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="card-title">Host Discovery</span></div>
+                        <div class="p-5 flex flex-col gap-4">
+                            <div class="flex flex-col gap-2">
+                                <label class="toggle-row group border-red-900/20"><span class="toggle-label text-red-400">Treat Online (-Pn)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-Pn" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-500"></div></div></label>
+                                <label class="toggle-row group"><span class="toggle-label">Ping Scan (-sn)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-sn" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                                <label class="toggle-row group"><span class="toggle-label">No DNS (-n)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-n" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                                <label class="toggle-row group"><span class="toggle-label">Traceroute</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="--traceroute" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                            </div>
+                            <div><label class="form-label">SYN/ACK Pings</label>
+                                <div class="flex gap-2">
+                                    <input type="text" data-arg="-PS" class="form-input-box nmap-txtval w-1/2 text-xs" placeholder="-PS80,443">
+                                    <input type="text" data-arg="-PA" class="form-input-box nmap-txtval w-1/2 text-xs" placeholder="-PA80">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Port Spec -->
+                    <div class="card-panel">
+                        <div class="card-header"><svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg><span class="card-title">Port Spec</span></div>
+                        <div class="p-5 flex flex-col gap-4">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="form-label">Ports (-p)</label><input type="text" data-arg="-p" class="form-input-box nmap-txt font-mono text-xs" placeholder="22,80,1-1024"></div>
+                                <div><label class="form-label">Top Ports</label><input type="number" data-arg="--top-ports" class="form-input-box nmap-txt" placeholder="1000"></div>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="toggle-row group"><span class="toggle-label text-blue-400">Fast Scan (-F)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-F" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                                <label class="toggle-row group"><span class="toggle-label">Sequential (-r)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-r" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service & OS -->
+                    <div class="card-panel">
+                        <div class="card-header"><svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg><span class="card-title">Service & OS</span></div>
+                        <div class="p-5 flex flex-col gap-4">
+                            <div class="flex flex-col gap-2">
+                                <label class="toggle-row group border-blue-900/20"><span class="toggle-label text-blue-300">OS Detection (-O)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-O" class="sr-only peer nmap-chk" checked><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                                <label class="toggle-row group border-blue-900/20"><span class="toggle-label text-blue-300">Service Version (-sV)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-sV" class="sr-only peer nmap-chk" checked><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                                <label class="toggle-row group"><span class="toggle-label">Aggressive OS Guess</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="--osscan-guess" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                            </div>
+                            <div><label class="form-label">Version Intensity</label>
+                                <div class="select-wrapper"><select data-arg="--version-intensity" class="form-select-box nmap-sel-val">
+                                    <option value="">Default (7)</option><option value="0">0 - Lightest</option>
+                                    <option value="2">2 - Light</option><option value="9">9 - All Probes</option>
+                                </select></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NSE -->
+                    <div class="card-panel">
+                        <div class="card-header"><svg class="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span class="card-title">Scripting (NSE)</span></div>
+                        <div class="p-5 flex flex-col gap-4">
+                            <label class="toggle-row group border-blue-900/20"><span class="toggle-label text-blue-300">Default Scripts (-sC)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-sC" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                            <div><label class="form-label">Scripts (--script)</label><input type="text" data-arg="--script" class="form-input-box nmap-txt text-xs" placeholder="vuln, exploit, default"></div>
+                            <div><label class="form-label">Script Args</label><input type="text" data-arg="--script-args" class="form-input-box nmap-txt font-mono text-xs" placeholder="user=admin,pass=admin"></div>
+                            <label class="toggle-row group"><span class="toggle-label">Script Trace</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="--script-trace" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                        </div>
+                    </div>
+
+                    <!-- Timing -->
+                    <div class="card-panel">
+                        <div class="card-header"><svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="card-title">Timing & Perf</span></div>
+                        <div class="p-5 flex flex-col gap-4">
+                            <div><label class="form-label">Template</label>
+                                <div class="select-wrapper"><select class="form-select-box nmap-sel">
+                                    <option value="-T0">Paranoid (-T0)</option><option value="-T1">Sneaky (-T1)</option>
+                                    <option value="-T2">Polite (-T2)</option><option value="-T3" selected>Normal (-T3)</option>
+                                    <option value="-T4">Aggressive (-T4)</option><option value="-T5">Insane (-T5)</option>
+                                </select></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="form-label">Min Rate</label><input type="number" data-arg="--min-rate" class="form-input-box nmap-txt" placeholder="pps"></div>
+                                <div><label class="form-label">Max Retries</label><input type="number" data-arg="--max-retries" class="form-input-box nmap-txt" placeholder="count"></div>
+                            </div>
+                            <div><label class="form-label">Host Timeout</label><input type="text" data-arg="--host-timeout" class="form-input-box nmap-txt" placeholder="30m, 1h"></div>
+                        </div>
+                    </div>
+
+                    <!-- Evasion -->
+                    <div class="card-panel">
+                        <div class="card-header"><svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="card-title">Evasion & Spoof</span></div>
+                        <div class="p-5 flex flex-col gap-4">
+                            <label class="toggle-row group border-indigo-900/20"><span class="toggle-label text-indigo-400">Fragment (-f)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-f" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-500"></div></div></label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="form-label">Decoys (-D)</label><input type="text" data-arg="-D" class="form-input-box nmap-txt font-mono text-xs" placeholder="RND:10"></div>
+                                <div><label class="form-label">Spoof IP (-S)</label><input type="text" data-arg="-S" class="form-input-box nmap-txt font-mono text-xs" placeholder="10.0.0.99"></div>
+                            </div>
+                            <div><label class="form-label">Source Port (-g)</label><input type="number" data-arg="-g" class="form-input-box nmap-txt" placeholder="53"></div>
+                        </div>
+                    </div>
+
+                    <!-- Misc -->
+                    <div class="card-panel">
+                        <div class="card-header"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg><span class="card-title">Misc</span></div>
+                        <div class="p-5 flex flex-col gap-4">
+                            <div class="flex flex-col gap-2">
+                                <label class="toggle-row group border-blue-900/20"><span class="toggle-label text-blue-300 font-semibold">Aggressive (-A)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-A" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                                <label class="toggle-row group"><span class="toggle-label">IPv6 (-6)</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="-6" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                                <label class="toggle-row group"><span class="toggle-label">State Reason</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="--reason" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                                <label class="toggle-row group"><span class="toggle-label">Packet Trace</span><div class="relative inline-flex items-center"><input type="checkbox" data-arg="--packet-trace" class="sr-only peer nmap-chk"><div class="w-9 h-5 bg-[#1f222a] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:peer-checked:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div></div></label>
+                            </div>
+                            <div><label class="form-label">Data String</label><input type="text" data-arg="--data-string" class="form-input-box nmap-txt font-mono text-xs" placeholder="Custom Payload"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

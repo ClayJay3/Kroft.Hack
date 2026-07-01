@@ -1,0 +1,42 @@
+<!-- SETTINGS MODAL -->
+<div id="settings-modal" class="hidden fixed inset-0 z-50 items-center justify-center p-6 bg-black/70 backdrop-blur-sm" onclick="if(event.target===this)closeSettings()">
+    <div class="bg-[#0a0c10] border border-[#1f222a] rounded-xl shadow-2xl w-full max-w-lg flex flex-col">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-[#1f222a]">
+            <span class="text-sm font-semibold text-gray-100">Settings</span>
+            <button onclick="closeSettings()" class="text-gray-600 hover:text-gray-300"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="p-5 space-y-4">
+            <div>
+                <label class="form-label">Engagement scope (CIDR / IPs, comma separated)</label>
+                <input type="text" id="settings-scope" class="form-input-box text-xs font-mono w-full" placeholder="192.168.69.0/24, 10.0.0.5">
+                <div class="text-[10px] text-gray-600 mt-1 leading-relaxed">Exploits and MSF scans against hosts outside this scope are blocked. Leave empty to allow everything.</div>
+            </div>
+
+            <div class="border-t border-[#1f222a] pt-4">
+                <div class="text-[11px] font-semibold text-violet-300 uppercase tracking-wider mb-3">Kroft.AI (Ollama)</div>
+
+                <div class="space-y-3">
+                    <div>
+                        <label class="form-label">Ollama endpoint</label>
+                        <input type="text" id="settings-ollama-base" class="form-input-box text-xs font-mono w-full" placeholder="https://ollama.example.com">
+                        <div class="text-[10px] text-gray-600 mt-1 leading-relaxed">Base URL of your Ollama server. The browser talks to it directly. Leave empty to disable Kroft.AI.</div>
+                    </div>
+                    <div>
+                        <label class="form-label">Default model</label>
+                        <input type="text" id="settings-ollama-model" class="form-input-box text-xs font-mono w-full" placeholder="gemma3:27b">
+                        <div class="text-[10px] text-gray-600 mt-1 leading-relaxed">Used when no model is picked in the Kroft.AI tab dropdown.</div>
+                    </div>
+                    <div>
+                        <label class="form-label">Context window (num_ctx)</label>
+                        <input type="number" min="0" step="1024" id="settings-ollama-ctx" class="form-input-box text-xs font-mono w-full" placeholder="e.g. 32768">
+                        <div class="text-[10px] text-gray-600 mt-1 leading-relaxed">Token context size sent to Ollama. Leave empty to use the model's own default.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="px-5 py-3 border-t border-[#1f222a] flex justify-end gap-2">
+            <button onclick="closeSettings()" class="text-[11px] text-gray-400 hover:text-gray-200 border border-[#1f222a] rounded px-3 py-1.5">Cancel</button>
+            <button onclick="saveSettings()" class="text-[11px] text-violet-300 bg-violet-500/15 hover:bg-violet-500/30 border border-violet-500/25 rounded px-3 py-1.5 font-bold">Save</button>
+        </div>
+    </div>
+</div>

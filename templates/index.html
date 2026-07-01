@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KROFT Security Matrix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- xterm.js for in-browser shell -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css">
+    <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <!-- three.js (UMD global) for the Cyberspace 3D visualizer -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+{% include 'partials/_styles.html' %}
+</head>
+<body class="flex h-screen w-full antialiased selection:bg-blue-500/30">
+
+{% include 'partials/_sidebar.html' %}
+
+<!-- MAIN -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden bg-[#050608]">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/8 via-transparent to-transparent pointer-events-none z-0"></div>
+
+{% include 'partials/_header.html' %}
+
+    <div class="flex-1 overflow-hidden p-5 lg:p-6 relative z-10">
+
+{% include 'partials/tabs/_matrix.html' %}
+
+{% include 'partials/tabs/_scanner.html' %}
+
+{% include 'partials/tabs/_pentest.html' %}
+
+{% include 'partials/tabs/_shells.html' %}
+
+{% include 'partials/tabs/_msfconsole.html' %}
+
+{% include 'partials/tabs/_kroftai.html' %}
+
+{% include 'partials/tabs/_cyberspace.html' %}
+
+{% include 'partials/tabs/_postaux.html' %}
+
+{% include 'partials/tabs/_findings.html' %}
+
+    </div><!-- /main content -->
+</main>
+
+{% include 'partials/modals/_settings.html' %}
+
+{% include 'partials/modals/_report.html' %}
+
+{% include 'partials/modals/_job_detail.html' %}
+
+<!-- JAVASCRIPT -->
+<script src="{{ url_for('static', filename='js/01-core.js') }}"></script>
+<script src="{{ url_for('static', filename='js/02-scanner.js') }}"></script>
+<script src="{{ url_for('static', filename='js/03-matrix.js') }}"></script>
+<script src="{{ url_for('static', filename='js/04-pentest.js') }}"></script>
+<script src="{{ url_for('static', filename='js/05-shells.js') }}"></script>
+<script src="{{ url_for('static', filename='js/06-kroftai.js') }}"></script>
+<script src="{{ url_for('static', filename='js/07-ai-commands.js') }}"></script>
+<script src="{{ url_for('static', filename='js/08-postaux.js') }}"></script>
+<script src="{{ url_for('static', filename='js/09-console.js') }}"></script>
+<script src="{{ url_for('static', filename='js/10-findings.js') }}"></script>
+<script src="{{ url_for('static', filename='js/11-extras.js') }}"></script>
+<script src="{{ url_for('static', filename='js/12-autopilot.js') }}"></script>
+<script src="{{ url_for('static', filename='js/13-init.js') }}"></script>
+<script src="{{ url_for('static', filename='js/14-cyberspace.js') }}"></script>
+</body>
+</html>

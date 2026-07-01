@@ -1,0 +1,7 @@
+Flask==3.0.0
+python-nmap==0.7.1
+SQLAlchemy==2.0.23
+# Pinned: the MSF integration code defends against this exact version's RPC
+# behavior (bare-bool responses, etc.). Upgrade only with deliberate retesting.
+pymetasploit3==1.0.6
+requests==2.34.2

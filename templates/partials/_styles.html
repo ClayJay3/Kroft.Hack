@@ -1,0 +1,36 @@
+    <style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; background-color: #050608; color: #9ca3af; overflow: hidden; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .bg-panel { background-color: #0f1116; }
+        .border-subtle { border-color: #1f222a; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2c3038; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+        .nav-btn { border-left: 3px solid transparent; }
+        .nav-btn.active { background-color: #1a1d24; color: #ffffff; border-left-color: #3b82f6; }
+        .nav-btn.active-red { background-color: #1a1010; color: #ffffff; border-left-color: #ef4444; }
+        .nav-btn.active-violet { background-color: #140f1e; color: #ffffff; border-left-color: #8b5cf6; }
+        .nav-btn.active-cyan { background-color: #081417; color: #ffffff; border-left-color: #22d3ee; }
+        .card-panel { @apply bg-[#0f1116] border border-[#1f222a] rounded-xl overflow-hidden shadow-lg hover:border-[#2a2f3a] transition-all duration-300 flex flex-col relative z-10; }
+        .card-header { @apply px-5 py-3.5 border-b border-[#1f222a] bg-gradient-to-r from-[#14171d] to-[#0f1116] flex items-center gap-3; }
+        .card-title { @apply text-xs font-bold text-gray-200 uppercase tracking-widest; }
+        .form-label { @apply block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2; }
+        .form-input-box { @apply w-full bg-[#050608] border border-[#1f222a] rounded-lg px-3.5 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all shadow-inner placeholder-gray-700; }
+        .select-wrapper { @apply relative w-full; }
+        .select-wrapper::after { content: ''; @apply absolute right-4 top-1/2 -translate-y-1/2 w-2 h-2 border-b-2 border-r-2 border-gray-500 transform rotate-45 pointer-events-none; }
+        .form-select-box { @apply w-full bg-[#050608] border border-[#1f222a] rounded-lg pl-3.5 pr-10 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all shadow-inner appearance-none cursor-pointer; }
+        .toggle-row { @apply flex items-center justify-between p-3 rounded-lg border border-[#1f222a] bg-[#050608] hover:bg-[#0a0c10] hover:border-blue-500/30 cursor-pointer transition-all shadow-sm; }
+        .toggle-label { @apply text-[13px] font-medium text-gray-400 transition-colors select-none flex items-center gap-2; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .xterm-viewport { overflow: hidden !important; }
+        .session-tab { @apply px-3 py-1.5 text-xs font-mono rounded-md border cursor-pointer transition-all; }
+        .session-tab.active { @apply bg-green-500/10 border-green-500/30 text-green-300; }
+        .session-tab.inactive { @apply bg-[#0f1116] border-[#1f222a] text-gray-500 hover:border-[#2a2f3a] hover:text-gray-300; }
+        .badge-exploit { @apply text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded; }
+        .rank-excellent { @apply bg-green-500/15 text-green-400 border border-green-500/25; }
+        .rank-great { @apply bg-blue-500/15 text-blue-400 border border-blue-500/25; }
+        .rank-good { @apply bg-yellow-500/15 text-yellow-400 border border-yellow-500/25; }
+        .rank-normal { @apply bg-gray-500/15 text-gray-400 border border-gray-500/25; }
+        .rank-low { @apply bg-red-500/15 text-red-400 border border-red-500/25; }
+    </style>

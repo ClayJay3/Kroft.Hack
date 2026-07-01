@@ -1,0 +1,33 @@
+services:
+  msf-rpc:
+    image: metasploitframework/metasploit-framework:latest
+    container_name: kroft_msf
+    # We use the full path to the binary to avoid entrypoint issues
+    command: /usr/src/metasploit-framework/msfrpcd -P msfrpc -S -a 0.0.0.0 -p 55553 -f
+    volumes:
+      - ./msf_data:/home/msf/.msf4
+    networks:
+      - kroft_net
+    restart: unless-stopped
+
+  kroft-scanner:
+    build: .
+    container_name: kroft_scanner
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/app
+    environment:
+      - MSF_HOST=msf-rpc
+      - MSF_PORT=55553
+      - MSF_PASSWORD=msfrpc
+    privileged: true
+    networks:
+      - kroft_net
+    restart: unless-stopped
+    depends_on:
+      - msf-rpc
+
+networks:
+  kroft_net:
+    driver: bridge

@@ -1,0 +1,97 @@
+<!-- CYBERSPACE (3D live attack visualizer) -->
+<div id="cyberspace" class="tab-content hidden flex-col h-full overflow-hidden">
+    <div id="cy-stage" class="relative flex-1 min-h-0 rounded-xl overflow-hidden border border-cyan-500/20 bg-black shadow-[inset_0_0_120px_rgba(0,0,0,0.9)]">
+
+        <!-- three.js renderer mounts its <canvas> here -->
+        <div id="cy-canvas" class="absolute inset-0"></div>
+
+        <!-- CRT flavor overlays (cosmetic, never capture input) -->
+        <div class="cy-scanlines absolute inset-0 pointer-events-none"></div>
+        <div class="cy-vignette absolute inset-0 pointer-events-none"></div>
+
+        <!-- top-left: brand + live stats + legend -->
+        <div class="absolute top-3 left-3 z-10 pointer-events-none font-mono select-none bg-black/55 border border-cyan-500/20 rounded-lg px-3 py-2.5 backdrop-blur-sm shadow-[0_0_20px_rgba(0,0,0,0.6)]">
+            <div class="text-cyan-300 text-xs font-bold tracking-[0.25em] drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]">KROFT // CYBERSPACE</div>
+            <div class="mt-1 flex items-center gap-3 text-[10px] text-cyan-500/70 tracking-widest">
+                <span>NODES <b id="cy-stat-hosts" class="text-cyan-200">0</b></span>
+                <span>OWNED <b id="cy-stat-owned" class="text-green-300">0</b></span>
+                <span>PKT/S <b id="cy-stat-pkts" class="text-cyan-200">0</b></span>
+            </div>
+            <div class="mt-2 text-[8px] text-cyan-500/50 tracking-[0.3em]">NODES</div>
+            <div class="space-y-0.5 text-[9px] tracking-widest text-gray-300">
+                <div class="flex items-center gap-1.5"><span class="cy-dot" style="background:#3b82f6"></span>DISCOVERED</div>
+                <div class="flex items-center gap-1.5"><span class="cy-dot" style="background:#f59e0b"></span>SCANNING</div>
+                <div class="flex items-center gap-1.5"><span class="cy-dot" style="background:#ef4444"></span>UNDER ATTACK</div>
+                <div class="flex items-center gap-1.5"><span class="cy-dot" style="background:#22c55e"></span>COMPROMISED</div>
+            </div>
+            <div class="mt-2 text-[8px] text-cyan-500/50 tracking-[0.3em]">PACKETS</div>
+            <div class="space-y-0.5 text-[9px] tracking-widest text-gray-300">
+                <div class="flex items-center gap-1.5"><span class="cy-dot" style="background:#fbbf24"></span>LOOT &rarr; CORE</div>
+                <div class="flex items-center gap-1.5"><span class="cy-dot" style="background:#38bdf8"></span>RECON &rarr; CORE</div>
+                <div class="flex items-center gap-1.5"><span class="cy-dot" style="background:#22d3ee"></span>DB LOOKUP</div>
+                <div class="flex items-center gap-1.5"><span class="cy-dot" style="background:#fb923c"></span>EXPLOIT / SCAN</div>
+                <div class="flex items-center gap-1.5"><span class="cy-dot" style="background:#ef4444"></span>CVE &middot; NVD</div>
+                <div class="flex items-center gap-1.5"><span class="cy-dot" style="background:#a78bfa"></span>CONSOLE</div>
+                <div class="flex items-center gap-1.5"><span class="cy-dot" style="background:#4ade80"></span>SESSION CMD</div>
+            </div>
+            <div class="mt-2 text-[8px] text-cyan-400/40 tracking-[0.2em]">▸ CLICK A HOST FOR INTEL</div>
+        </div>
+
+        <!-- top-right: current AI action readout -->
+        <div class="absolute top-3 right-3 z-10 pointer-events-none font-mono text-right select-none">
+            <div class="text-[9px] text-cyan-500/60 tracking-[0.25em]">AI AGENT</div>
+            <div class="mt-1 inline-flex items-center gap-2 bg-black/50 border border-cyan-500/20 rounded px-2.5 py-1 backdrop-blur-sm">
+                <span id="cy-action-dot" class="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
+                <span id="cy-action" class="text-[11px] text-cyan-200 tracking-wide">STANDBY</span>
+            </div>
+        </div>
+
+        <!-- empty-state hint -->
+        <div id="cy-empty" class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+            <div class="text-center font-mono">
+                <div class="text-cyan-500/40 text-sm tracking-[0.3em] animate-pulse">AWAITING NETWORK TELEMETRY</div>
+                <div class="text-gray-600 text-[11px] mt-2">Run a scan or let Kroft.AI loose, and hosts will warp in here.</div>
+            </div>
+        </div>
+
+        <!-- bottom: timeline / playback -->
+        <div class="absolute bottom-0 left-0 right-0 z-20 px-4 py-3 bg-gradient-to-t from-black/90 via-black/70 to-transparent">
+            <div class="flex items-center gap-3 font-mono">
+                <button id="cy-play" onclick="cyTogglePlay()" title="Play / pause"
+                        class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-md border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 hover:border-cyan-400/50 transition-all">
+                    <svg id="cy-play-icon" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <span id="cy-clock" class="text-[11px] text-cyan-300/80 tabular-nums w-16 text-center">00:00</span>
+                <input id="cy-scrub" type="range" min="0" max="1000" value="1000" step="1"
+                       oninput="cyScrubInput(this.value)" class="cy-range flex-1">
+                <select id="cy-speed" onchange="cySetSpeed(this.value)" title="Playback speed"
+                        class="flex-shrink-0 bg-black/60 border border-cyan-500/25 text-cyan-300 text-[10px] rounded px-1.5 py-1 focus:outline-none focus:border-cyan-400/60">
+                    <option value="1">1×</option>
+                    <option value="2">2×</option>
+                    <option value="4">4×</option>
+                    <option value="8">8×</option>
+                </select>
+                <button id="cy-live" onclick="cyGoLive()" title="Jump to live"
+                        class="flex-shrink-0 flex items-center gap-1.5 rounded-md border border-green-500/40 bg-green-500/10 text-green-300 text-[10px] font-bold tracking-widest px-2.5 py-1.5 hover:bg-green-500/20 transition-all">
+                    <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>LIVE
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Cyberspace visualizer: local, cosmetic styling */
+    #cy-canvas canvas { display:block; width:100%; height:100%; }
+    .cy-dot { display:inline-block; width:7px; height:7px; border-radius:9999px; box-shadow:0 0 6px currentColor; }
+    .cy-scanlines { background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,20,25,0.12) 3px, rgba(0,0,0,0) 4px); opacity:0.5; mix-blend-mode:overlay; }
+    .cy-vignette  { background:radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%); }
+    /* Timeline scrubber */
+    .cy-range { -webkit-appearance:none; appearance:none; height:4px; border-radius:4px;
+                background:linear-gradient(to right, #22d3ee var(--cy-fill,100%), #1f2a2e var(--cy-fill,100%)); cursor:pointer; }
+    .cy-range::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:13px; height:13px; border-radius:9999px;
+                background:#22d3ee; border:2px solid #061417; box-shadow:0 0 8px rgba(34,211,238,0.8); cursor:pointer; }
+    .cy-range::-moz-range-thumb { width:13px; height:13px; border-radius:9999px; background:#22d3ee; border:2px solid #061417;
+                box-shadow:0 0 8px rgba(34,211,238,0.8); cursor:pointer; }
+    #cy-live.cy-replaying { border-color:rgba(245,158,11,0.5); background:rgba(245,158,11,0.12); color:#fcd34d; }
+</style>
